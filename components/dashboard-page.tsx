@@ -207,16 +207,17 @@ export default function DashboardPage() {
           const newOverview = overview.substring(0, lastCommaIndex) + '}'
           console.log(newOverview)
           const analysisReport : string = detailedAnalysis.split('"analysis_report":')[1]
-          console.log(analysisReport); // 输出: "详细分析:{"..."}"
+          // console.log(analysisReport); // 输出: "详细分析:{"..."}"
           const firstEqualsIndex = analysisReport.indexOf('====================================');
           const secondEqualsIndex = analysisReport.indexOf('====================================', firstEqualsIndex + 36);
           // console.log(secondEqualsIndex)
           const lastEqualsIndex = analysisReport.lastIndexOf('====================================');
-          const extracted = analysisReport.substring(secondEqualsIndex + 36, lastEqualsIndex).trim();
-          // console.log("analysis")
-          // console.log(extracted)
+          const report : string  = '{"report":' + '"'+ analysisReport.substring(secondEqualsIndex + 36, lastEqualsIndex).trim() + '"}';
+          console.log("report")
+          console.log(report)
           try {
             const jsonObject = JSON.parse(newOverview);
+            const jsonReport = JSON.parse(report)
             console.log(jsonObject);
             
             const actionMap: { [key: string]: string } = {
@@ -251,7 +252,7 @@ export default function DashboardPage() {
               amount: jsonObject.quantity,
               confidence: jsonObject.confidence,
               reason: jsonObject.reasoning,
-              report: extracted,
+              report: jsonReport.report,
               agentResults: jsonObject.agent_signals
             }
             setResults(res)
